@@ -85,7 +85,7 @@ dnf install espeak-devel openal-soft-devel libpng-devel SDL_image-devel gcc-objc
 ```
 - Ubuntu 22.04:
 ```bash
-apt -y install git gobjc gnustep-devel make libsdl1.2-dev libvorbis-dev libopenal-dev g++ libespeak-dev libnspr4-dev
+apt -y install git gobjc gnustep-devel make libsdl1.2-dev libvorbis-dev libopenal-dev g++ libespeak-dev libnspr4-dev libpng-dev libespeak-ng-dev
 ```
 - Other distros will likely have similar packages available in their repositories. If you find out which packages to install on another Linux distribution, it would be really nice if you could add them here.
 
