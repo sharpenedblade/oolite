@@ -45,10 +45,8 @@ modules:
     buildsystem: autotools
     sources:
       - type: archive
-        url: "https://github.com/gnustep/libs-base/releases/download/base-1_28_1/gnustep-base-1.28.1.tar.gz"
-        sha256: 7e71b26970b229dd9e90332417f4c5e82630fd16c41c1f20c0a5bf0620435602
-      - type: patch
-        path: gnustep-base-libxml2-compat.patch
+        url: "https://github.com/gnustep/libs-base/releases/download/base-1_31_1/gnustep-base-1.31.1.tar.gz"
+        sha256: e7546f1c978a7c75b676953a360194a61e921cb45a4804497b4f346a460545cd
   - name: oolite
     buildsystem: simple
     build-commands:
