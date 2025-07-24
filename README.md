@@ -85,7 +85,7 @@ dnf install espeak-devel openal-soft-devel libpng-devel SDL_image-devel gcc-objc
 ```
 - Ubuntu 22.04:
 ```bash
-apt -y install git gobjc gnustep-devel make libsdl1.2-dev libvorbis-dev libopenal-dev g++ libespeak-dev libnspr4-dev libpng-dev libespeak-ng-dev
+apt -y install git gobjc gnustep-devel make libsdl1.2-dev libvorbis-dev libopenal-dev g++ libnspr4-dev libpng-dev libespeak-ng-dev
 ```
 - openSUSE Tumbleweed:
 Dependencies
