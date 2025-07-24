@@ -82,7 +82,7 @@ jobs:
       - name: install all the necessary packages
         run: |
           sudo apt update
-          sudo apt -y install git gobjc gnustep-devel make libsdl1.2-dev libvorbis-dev libopenal-dev g++ libespeak-dev libnspr4-dev
+          sudo apt -y install git gobjc gnustep-devel make libsdl1.2-dev libvorbis-dev libopenal-dev g++ libespeak-dev libnspr4-dev libpng-dev libespeak-ng-dev
 
       - name: Checkout Oolite
         uses: actions/checkout@v4
