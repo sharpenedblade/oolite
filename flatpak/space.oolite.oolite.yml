@@ -50,6 +50,8 @@ modules:
   - name: oolite
     buildsystem: simple
     build-commands:
+      # Remove all precompiled libs except libjs
+      - rm -r ./deps/Linux-deps/x86_64/lib-static-hide/
       - make -f GNUmakefile debug=no strip=no -j$FLATPAK_BUILDER_N_JOBS GNUSTEP_MAKEFILES=/app/share/GNUstep/Makefiles OBJCFLAGS="-Wno-incompatible-pointer-types"
       - cp -r oolite.app/* /app/bin
       - install -D installers/FreeDesktop/space.oolite.oolite.metainfo.xml /app/share/metainfo/space.oolite.oolite.metainfo.xml
