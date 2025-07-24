@@ -58,9 +58,9 @@ else
 #     endif
 #     LIBJS_INC_DIR                = $(LIBJS_DIR)/dist/include
     ifeq ($(debug),yes)
-        LIBJS                    = jsdbg_static 
+        LIBJS                    = jsdbg_static
 # By default we don't share the debug version of JS library
-# If you want to debug into JS, ensure a libjsdbg_static.a exists into $(LIBJS_DIR) 
+# If you want to debug into JS, ensure a libjsdbg_static.a exists into $(LIBJS_DIR)
     else
         LIBJS                    = js_static
     endif
@@ -69,13 +69,13 @@ else
         OOLITE_SHARED_LIBS       = -Ldeps/Linux-deps/$(HOST_ARCH)/lib_linker
     endif
 
-    ADDITIONAL_INCLUDE_DIRS      = -I$(LIBJS_INC_DIR) -Isrc/SDL -Isrc/Core -Isrc/BSDCompat -Isrc/Core/Scripting -Isrc/Core/Materials -Isrc/Core/Entities -Isrc/Core/OXPVerifier -Isrc/Core/Debug -Isrc/Core/Tables -Isrc/Core/MiniZip -Ideps/Linux-deps/include 
-    ADDITIONAL_OBJC_LIBS         = $(OOLITE_SHARED_LIBS) -lGLU -lGL -lX11 -lSDL -lgnustep-base -L$(LIBJS_DIR) -l$(LIBJS) -lopenal -lz -lvorbisfile -lpng `nspr-config --libs` -lstdc++ 
+    ADDITIONAL_INCLUDE_DIRS      = -I$(LIBJS_INC_DIR) -Isrc/SDL -Isrc/Core -Isrc/BSDCompat -Isrc/Core/Scripting -Isrc/Core/Materials -Isrc/Core/Entities -Isrc/Core/OXPVerifier -Isrc/Core/Debug -Isrc/Core/Tables -Isrc/Core/MiniZip -Ideps/Linux-deps/include
+    ADDITIONAL_OBJC_LIBS         = $(OOLITE_SHARED_LIBS) -lGLU -lGL -lX11 -lSDL -lgnustep-base -L$(LIBJS_DIR) -l$(LIBJS) -lopenal -lz -lvorbisfile -lpng14 `nspr-config --libs` -lstdc++
     ADDITIONAL_OBJCFLAGS         = -Wall -std=gnu99 -DLOADSAVEGUI -DLINUX -DXP_UNIX -Wno-import `sdl-config --cflags` `nspr-config --cflags`
     ADDITIONAL_CFLAGS            = -Wall -DLINUX -DNEED_STRLCPY `sdl-config --cflags` `nspr-config --cflags`
 
     ifeq ($(ESPEAK),yes)
-        ADDITIONAL_OBJC_LIBS     += -lespeak
+        ADDITIONAL_OBJC_LIBS     += -lespeak-ng
         ADDITIONAL_OBJCFLAGS     += -DHAVE_LIBESPEAK=1
         GNUSTEP_OBJ_DIR_NAME     := $(GNUSTEP_OBJ_DIR_NAME).spk
     endif
