@@ -81,7 +81,7 @@ Spidermonkey (libmozjs). On others you may need to build them from source.
 
 - Fedora Linux:
 ```bash
-dnf install espeak-devel openal-soft-devel libpng-devel SDL_image-devel gcc-objc nspr-devel sdl12-compat-devel SDL2-devel gnustep-base-devel gnustep-make
+dnf install espeak-ng-devel openal-soft-devel libpng-devel SDL_image-devel gcc-objc nspr-devel sdl12-compat-devel SDL2-devel gnustep-base-devel gnustep-make
 ```
 - Ubuntu 22.04:
 ```bash
@@ -90,7 +90,7 @@ apt -y install git gobjc gnustep-devel make libsdl1.2-dev libvorbis-dev libopena
 - openSUSE Tumbleweed:
 Dependencies
 ```bash
-zypper install espeak-devel openal-soft-devel libpng-devel SDL_image-devel gcc-objc mozilla-nspr-devel sdl12_compat_devel SDL2-devel gnustep-base-devel gnustep-make
+zypper install espeak-ng-devel openal-soft-devel libpng-devel SDL_image-devel gcc-objc mozilla-nspr-devel sdl12_compat_devel SDL2-devel gnustep-base-devel gnustep-make
 ```
 - Other distros will likely have similar packages available in their repositories. If you find out which packages to install on another Linux distribution, it would be really nice if you could add them here.
 
