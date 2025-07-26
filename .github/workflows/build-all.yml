@@ -12,7 +12,7 @@ jobs:
       - name: install all the necessary packages
         run: |
           sudo apt update
-          # Shouldn't we? sudo apt -y upgrade
+          sudo apt -y upgrade # Flibble testing.
           echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
           sudo apt -y install libreoffice ttf-mscorefonts-installer
 
@@ -88,14 +88,10 @@ jobs:
       - name: install all the necessary packages
         run: |
           sudo apt update
-          sudo apt -y upgrade # Testing (Flibble)
           sudo apt -y install git gobjc gnustep-devel make libsdl1.2-dev libvorbis-dev libopenal-dev g++ libnspr4-dev libpng-dev libespeak-ng-dev
 
       - name: Show packages and versions
         run: |
-          echo
-          echo "Flibble: list upgradable packages"
-          apt list --upgradable
           echo
           echo "Flibble: libpng info"
           dpkg -l | grep '^ii *libpng' | awk '{print $2"-"$3}'
