@@ -16,11 +16,6 @@ jobs:
           echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | sudo debconf-set-selections
           sudo apt -y install libreoffice ttf-mscorefonts-installer
 
-      - name: Show libpng versions
-        run: |
-          dpkg -l | grep '^ii *libpng' | awk '{print $2"-"$3}'
-          ls -al /usr/lib/x86_64-linux-gnu/libpng*  | sed 's@^[^/]*@@g'
-
       - name: Checkout Oolite
         uses: actions/checkout@v4
         with:
@@ -87,7 +82,7 @@ jobs:
 
       - name: install all the necessary packages
         run: |
-          sudo apt update
+          # sudo apt update # Has already been done in common. Seems pointless doing it again mere seconds later.
           sudo apt -y install git gobjc gnustep-devel make libsdl1.2-dev libvorbis-dev libopenal-dev g++ libnspr4-dev libpng-dev libespeak-ng-dev
 
       - name: Show packages and versions
@@ -155,7 +150,7 @@ jobs:
     steps:
       - name: install all the necessary packages
         run: |
-          sudo apt update
+          # sudo apt update # Already done in common-steps
           sudo apt -y install graphviz lcov doxygen
           sudo pip3 install coverxygen
 
