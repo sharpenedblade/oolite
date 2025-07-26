@@ -40,12 +40,12 @@ MA 02110-1301, USA.
 #import "OOSystemDescriptionManager.h"
 
 #if OOLITE_ESPEAK
-#include "speak_lib.h"
+#include <speak_lib.h>
 #endif
 
 @class	GameController, CollisionRegion, MyOpenGLView, GuiDisplayGen,
 	Entity, ShipEntity, StationEntity, OOPlanetEntity, OOSunEntity,
-	OOVisualEffectEntity, PlayerEntity, OORoleSet, WormholeEntity, 
+	OOVisualEffectEntity, PlayerEntity, OORoleSet, WormholeEntity,
 	DockEntity, OOJSScript, OOWaypointEntity, OOSystemDescriptionManager;
 
 
