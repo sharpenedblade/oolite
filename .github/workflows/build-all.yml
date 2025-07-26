@@ -94,6 +94,9 @@ jobs:
       - name: Show packages and versions
         run: |
           echo
+          echo "Flibble: list upgradable packages"
+          apt list --upgradable
+          echo
           echo "Flibble: libpng info"
           dpkg -l | grep '^ii *libpng' | awk '{print $2"-"$3}'
           ls -al /usr/lib/x86_64-linux-gnu/libpng*  | sed 's@^[^/]*@@g'
