@@ -100,7 +100,7 @@ MA 02110-1301, USA.
 #endif
 
 #if OOLITE_ESPEAK
-#include <espeak/speak_lib.h>
+#include "speak_lib.h"
 #endif
 
 enum
