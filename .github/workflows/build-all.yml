@@ -88,7 +88,7 @@ jobs:
       - name: install all the necessary packages
         run: |
           sudo apt update
-          # Shouldn't we? sudo apt -y upgrade
+          sudo apt -y upgrade # Testing (Flibble)
           sudo apt -y install git gobjc gnustep-devel make libsdl1.2-dev libvorbis-dev libopenal-dev g++ libnspr4-dev libpng-dev libespeak-ng-dev
 
       - name: Show packages and versions
