@@ -108,8 +108,8 @@ git checkout -- .gitmodules
 This will just compile the project:
 
 ```bash
-source /usr/lib64/GNUstep/Makefiles/GNUstep.sh
-# might also be somewhere else like "/usr/share/GNUstep/Makefiles/GNUstep.sh"
+source /usr/share/GNUstep/Makefiles/GNUstep.sh
+# might also be somewhere else like "/usr/lib64/GNUstep/Makefiles/GNUstep.sh"
 
 make -f Makefile release -j$(nproc)
 ```
