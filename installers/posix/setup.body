@@ -1,17 +1,18 @@
 
-# 
+#
 # Original by Konstantinos Sykas <getafix@oolite.org> (26-Mar-2011)
 #
 #        Type: shell script
-# Description: The Oolite installation script, executed following the package self-extraction. 
-# 
+# Description: The Oolite installation script, executed following the package self-extraction.
+#
 # 2011-04-03: Updated to facilitate rsync repository setup for oolite-update script
 # 2011-04-04: Redirected "which" stderr to /dev/null. In some distros (e.g. Fedora 11, Mint 10 Julia etc.)
 #             the "which <filename>" command uses stderr to report a file not found or other warnings
-# 2018-07-02: Add command line arguments support. 
+# 2018-07-02: Add command line arguments support.
 #			  First argument added is "--systemwide-path Directory"
 # 2023-07-10: Add interactive parts from oolite.src to startup script based on FreeDesktop tools
-# 
+# 2025-07-27: Tidied up. Added vars to fix erroneously expanded $HOME in installed scripts.
+#
 
 
 # Handle the command line arguments
@@ -19,22 +20,22 @@ OOLITE_VERSION=$1	# This value is given in the make_installer.sh script. Check t
 shift
 while true
 do
-	case "$1" in
-	--systemwide-directory)
-	INSTALL_ROOT_SYSTEMWIDE=${2:-.}/dummy
-	INSTALL_ROOT_SYSTEMWIDE=`dirname $INSTALL_ROOT_SYSTEMWIDE`
-	if [ ! -d "$INSTALL_ROOT_SYSTEMWIDE" ]; then
-	  echo System directory $INSTALL_ROOT_SYSTEMWIDE does not exist. Exiting...
-	  exit 1
-	fi
-	shift 2
-	;;
-	-*)
-	echo Unrecognized Oolite setup flag : "$1" >&2
-	exit 1
-	;;
+    case "$1" in
+    --systemwide-directory)
+    INSTALL_ROOT_SYSTEMWIDE=${2:-.}/dummy
+    INSTALL_ROOT_SYSTEMWIDE=`dirname $INSTALL_ROOT_SYSTEMWIDE`
+    if [ ! -d "$INSTALL_ROOT_SYSTEMWIDE" ]; then
+      echo System directory $INSTALL_ROOT_SYSTEMWIDE does not exist. Exiting...
+      exit 1
+    fi
+    shift 2
+    ;;
+    -*)
+    echo Unrecognized Oolite setup flag : "$1" >&2
+    exit 1
+    ;;
     *)
-	break ;;
+    break ;;
     esac
 done
 
@@ -43,7 +44,7 @@ done
 INSTALL_ROOT=""
 OOLITE_ROOT_NAME="Oolite${TRUNK}"
 OOLITEAPP_NAME="oolite.app"
-if [ ! ${INSTALL_ROOT_SYSTEMWIDE} ] 
+if [ ! ${INSTALL_ROOT_SYSTEMWIDE} ]
 then
 INSTALL_ROOT_SYSTEMWIDE="/opt"
 fi
@@ -64,7 +65,7 @@ then
 else
   USER_CHOICES="[s/H]"
 fi
-if [ ! ${UNATTENDED_INSTALLATION} ] 
+if [ ! ${UNATTENDED_INSTALLATION} ]
 then
   read -p "Install Oolite${TRUNK} system-wide or in your home directory? ${USER_CHOICES} " CHOICE
   if [ ${USER_IS_ROOT} ]
@@ -89,15 +90,19 @@ ICON_SIZE="48"
 if [ ${USER_IS_ROOT} ]
 then
   INSTALL_ROOT=${INSTALL_ROOT_SYSTEMWIDE}
+  INSTALL_ROOT_SCRIPT=${INSTALL_ROOT}
   STARTUP_SCRIPTS_PATH=${STARTUP_SCRIPTS_PATH_SYSTEMWIDE}
   DESKTOP_MODE="system"
 else
   INSTALL_ROOT=$HOME/${INSTALL_ROOT_USERHOME}
+  INSTALL_ROOT_SCRIPT="\$HOME/${INSTALL_ROOT_USERHOME}"
   STARTUP_SCRIPTS_PATH=$HOME/${STARTUP_SCRIPTS_PATH_USERHOME}
   DESKTOP_MODE="user"
 fi
 OOLITE_ROOT=${INSTALL_ROOT}/${OOLITE_ROOT_NAME}
+OOLITE_ROOT_SCRIPT=${INSTALL_ROOT_SCRIPT}/${OOLITE_ROOT_NAME}
 OOLITEAPP_PATH=${OOLITE_ROOT}/${OOLITEAPP_NAME}
+OOLITEAPP_PATH_SCRIPT=${OOLITE_ROOT_SCRIPT}/${OOLITEAPP_NAME}
 INSTALLER_REPOS=${OOLITEAPP_PATH}/oolite.installer.tmp
 SELF_PATH=$(cd $(dirname $0); pwd -P)
 SELF_FILENAME=$(basename $0)
@@ -123,7 +128,6 @@ then
   then
     INSTALL_ROOT_SYSTEMWIDE_ACTIVE=`cat ${OOLITE_SHORTCUT} | head -2 | tail -1`
     INSTALL_ROOT_SYSTEMWIDE_ACTIVE=${INSTALL_ROOT_SYSTEMWIDE_ACTIVE%%/Oolite*}
-    
     ${INSTALL_ROOT_SYSTEMWIDE_ACTIVE}/${OOLITE_ROOT_NAME}/uninstall 2> /dev/null
     if [ $? -eq ${ERROR_CODE_UNINSTALL_FAILED} ]
     then
@@ -151,8 +155,8 @@ cd ${OOLITE_ROOT}
 echo "#!/bin/sh" > uninstall
 echo >> uninstall
 echo >> uninstall
-if [ ${TRUNK} ] 
-then 
+if [ ${TRUNK} ]
+then
   echo "TRUNK=\"${TRUNK}\"" >> uninstall
 fi
 echo "OOLITE_ROOT_NAME=\"${OOLITE_ROOT_NAME}\"" >> uninstall
@@ -219,20 +223,20 @@ cat << EOF_STARTUP_SCRIPT > oolite${TRUNK}
 # show readme on first launch
 if [ ! -f \$HOME/.Oolite/.oolite${TRUNK}-run ]
 then
-   mkdir -p $HOME/.Oolite/
+   mkdir -p \$HOME/.Oolite/
    touch \$HOME/.Oolite/.oolite${TRUNK}-run
-   xdg-open file://${OOLITE_ROOT}/doc/README-PREAMBLE.TXT
-   xdg-open file://${OOLITE_ROOT}/doc/README.TXT
+   xdg-open file://${OOLITE_ROOT_SCRIPT}/doc/README-PREAMBLE.TXT
+   xdg-open file://${OOLITE_ROOT_SCRIPT}/doc/README.TXT
 fi
 
 # launch oolite
-${OOLITEAPP_PATH}/oolite-wrapper \$@
+${OOLITEAPP_PATH_SCRIPT}/oolite-wrapper \$@
 RC=\$?
 
 # show message in case of error
 if [ "\${RC}" != "0" ]
 then
-        notify-send --urgency=critical --icon ${OOLITE_ROOT}/oolite.app/Resources/Textures/oolite-logo1.png "Oolite" "Oolite died in a singularity with exit code \${RC}. For troubleshooting check console and log output."
+        notify-send --urgency=critical --icon ${OOLITE_ROOT_SCRIPT}/oolite.app/Resources/Textures/oolite-logo1.png "Oolite" "Oolite died in a singularity with exit code \${RC}. For troubleshooting check console and log output."
 fi
 
 exit \${RC}
@@ -240,7 +244,7 @@ EOF_STARTUP_SCRIPT
 
 chmod +x oolite${TRUNK}
 echo "#!/bin/sh" > oolite${TRUNK}-update
-echo "${OOLITEAPP_PATH}/oolite-update \$@" >> oolite${TRUNK}-update
+echo "${OOLITEAPP_PATH_SCRIPT}/oolite-update \$@" >> oolite${TRUNK}-update
 echo "exit \$?" >> oolite${TRUNK}-update
 chmod +x oolite${TRUNK}-update
 
@@ -331,19 +335,19 @@ fi
 echo -n "Cleaning up temporary folders... "
 rc=0
 rm ${OOLITEAPP_PATH}/setup 1> /dev/null 2> /dev/null
-if [ $? -ne 0 ] 
-then 
-  rc=$(($rc+1)) 
+if [ $? -ne 0 ]
+then
+  rc=$(($rc+1))
 fi
 rmdir ${OOLITE_ROOT}/FreeDesktop 1> /dev/null 2> /dev/null
-if [ $? -ne 0 ] 
-then 
-  rc=$(($rc+2)) 
+if [ $? -ne 0 ]
+then
+  rc=$(($rc+2))
 fi
 rmdir ${INSTALLER_REPOS} 1> /dev/null 2> /dev/null
-if [ $? -ne 0 ] 
-then 
-  rc=$(($rc+11)) 
+if [ $? -ne 0 ]
+then
+  rc=$(($rc+11))
 fi
 if [ $rc -gt 10 ]
 then
@@ -380,4 +384,3 @@ echo
 
 # Exit with grace!
 exit 0
-

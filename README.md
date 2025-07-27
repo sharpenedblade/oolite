@@ -96,9 +96,14 @@ zypper install espeak-ng-devel openal-soft-devel libpng-devel SDL_image-devel gc
 
 #### First fetch the source and all the git submodules
 ```bash
+#git clone --depth 1 https://github.com/OoliteProjec/oolite.git
 git clone --depth 1 https://github.com/OoMrFlibble/oolite.git
 cd oolite
+#On i686 a symlink is required
+cd deps/Linux-deps && ln -s x86 i686 && cd -
 cp .absolute_gitmodules .gitmodules
+#Fix to use my Linux-deps.
+sed -i 's@OoliteProject/oolite-linux-dependencies.git@OoMrFlibble/oolite-linux-dependencies.git@' .gitmodules
 git submodule update --init
 git checkout -- .gitmodules
 ```
@@ -121,6 +126,7 @@ source /usr/lib64/GNUstep/Makefiles/GNUstep.sh
 # might also be somewhere else like "/usr/share/GNUstep/Makefiles/GNUstep.sh"
 
 make -f Makefile pkg-posix-nightly HOST_ARCH=$(uname -m)
+# substitute pkg-posix-test if you want debug console support.
 ```
 
 #### Collect results
@@ -183,3 +189,4 @@ $ git checkout -- .gitmodules
 
 You should now have access to the submodules, without git complaining
 that .gitmodules has changed or including .gitmodules in pull requests.
+5
