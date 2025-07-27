@@ -94,8 +94,10 @@ zypper install espeak-ng-devel openal-soft-devel libpng-devel SDL_image-devel gc
 ```
 - Other distros will likely have similar packages available in their repositories. If you find out which packages to install on another Linux distribution, it would be really nice if you could add them here.
 
-#### First fetch all the git submodules
+#### First fetch the source and all the git submodules
 ```bash
+git clone --depth 1 https://github.com/OoMrFlibble/oolite.git
+cd oolite
 cp .absolute_gitmodules .gitmodules
 git submodule update --init
 git checkout -- .gitmodules
