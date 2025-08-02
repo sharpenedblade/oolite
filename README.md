@@ -99,8 +99,6 @@ zypper install espeak-ng-devel openal-soft-devel libpng-devel SDL_image-devel gc
 #git clone --depth 1 https://github.com/OoliteProjec/oolite.git
 git clone --depth 1 https://github.com/OoMrFlibble/oolite.git
 cd oolite
-#On i686 a symlink is required
-cd deps/Linux-deps && ln -s x86 i686 && cd -
 cp .absolute_gitmodules .gitmodules
 #Fix to use my Linux-deps.
 sed -i 's@OoliteProject/oolite-linux-dependencies.git@OoMrFlibble/oolite-linux-dependencies.git@' .gitmodules
