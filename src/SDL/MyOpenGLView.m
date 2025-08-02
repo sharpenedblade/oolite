@@ -1197,6 +1197,44 @@ enum PreferredAppMode
 
     // for each active path
 	int i;
+	wchar_t wcsPrimaryDeviceID[256] = L"OOUnknownDevice";
+	// get the string device id of the primary display device
+	// we cannot guarantee the enumeration order so we must go
+	// through all diplay device paths here and then do it again
+	// for the DisplayConfig queries
+	for (i = 0; i < pathCount; i++)
+	{
+		int j = 0;
+		char saveDeviceName[64];
+		DISPLAY_DEVICE dd;
+		ZeroMemory(&dd, sizeof(dd));
+		dd.cb = sizeof(dd);
+		EnumDisplayDevices(NULL, i, &dd, 0);
+		if (dd.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE)
+		{
+			// second call to EnumDisplayDevices gets us the monitor device ID
+			strncpy(saveDeviceName, dd.DeviceName, 33);
+			while (EnumDisplayDevices(saveDeviceName, j, &dd, 0x00000001))
+			{
+				if (EXPECT(dd.StateFlags & DISPLAY_DEVICE_ACTIVE))
+				{
+					// found it, store its ID
+					mbstowcs(wcsPrimaryDeviceID, dd.DeviceID, 129);
+					// got what we wanted, no need to stay in the loops
+					goto finished;
+				}
+				else
+				{
+					OOLogWARN(@"gameView.isOutputDisplayHDREnabled", @"Primary monitor candidate %s (%s %s) not active.", dd.DeviceName, dd.DeviceString, dd.DeviceID);
+					// continue searching for a primary monitor that is attached
+				}
+				j++;
+			}
+		}
+	}
+	
+finished:
+	
 	for (i = 0; i < pathCount; i++)
 	{
 		DISPLAYCONFIG_PATH_INFO *path = &pPathInfoArray[i];
@@ -1245,22 +1283,10 @@ enum PreferredAppMode
 			return NO;
 		}
 		
-		char saveDeviceName[64];
-		wchar_t wcsDeviceID[256];
-		DISPLAY_DEVICE dd;
-		ZeroMemory(&dd, sizeof(dd));
-		dd.cb = sizeof(dd);
-		EnumDisplayDevices(NULL, i, &dd, 0);
-		BOOL isPrimaryDisplayDevice = dd.StateFlags & DISPLAY_DEVICE_PRIMARY_DEVICE;
-		// second call to EnumDisplayDevices gets us the monitor device ID
-		strncpy(saveDeviceName, dd.DeviceName, 33);
-		EnumDisplayDevices(saveDeviceName, 0, &dd, 0x00000001);
-		mbstowcs(wcsDeviceID, dd.DeviceID, 129);
-		
+		BOOL isPrimaryDisplayDevice = !wcscmp(targetName.monitorDevicePath, wcsPrimaryDeviceID);
 		// we are starting om the primary device, so check that one for advanced color support
 		// we also ensure that wide color gamut SDR displays do not get incorrectly detected as supporting HDR 
-		// just to be safe, ensure that the monitor device from QDC being checked is the same as the one from EnumDisplayDevices
-		if (isPrimaryDisplayDevice && !wcscmp(targetName.monitorDevicePath, wcsDeviceID) && 
+		if (isPrimaryDisplayDevice && 
 			((isAdvColorInfo2DetectionSuccess && advColorInfo2.highDynamicRangeSupported && advColorInfo2.activeColorMode == DISPLAYCONFIG_ADVANCED_COLOR_MODE_HDR) ||
 			(!isAdvColorInfo2DetectionSuccess && advColorInfo.advancedColorSupported && advColorInfo.advancedColorEnabled && !advColorInfo.wideColorEnforced)))
 		{
